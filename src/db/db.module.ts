@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './models/user.model';
-import { Product, ProductSchema } from './models/products.model';
-import { Cart, CartSchema } from './models/cart.model';
+import { UserSchema } from './models/user.model';
+import {  ProductSchema } from './models/products.model';
+import {  CartSchema } from './models/cart.model';
 
 @Module({
   imports: [

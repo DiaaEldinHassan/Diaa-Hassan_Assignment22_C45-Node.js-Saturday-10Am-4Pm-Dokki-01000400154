@@ -3,3 +3,4 @@ export * from './email.service';
 export * from './token.service';
 export * from './mail.module';
 export * from './mail.constants';
+export * from './s3.service';

@@ -62,6 +62,7 @@ export class AuthService {
       try {
         await this.emailService.sendVerificationEmail(userData.email, otp);
       } catch (emailError) {
+        console.log(emailError)
         console.error('Failed to send verification email:', emailError);
       }
 
@@ -71,6 +72,7 @@ export class AuthService {
         statusCode: 201,
       };
     } catch (error: unknown) {
+      console.log(error)
       if (error instanceof ConflictError) throw error;
       throw new BadRequestError(
         error instanceof Error ? error.message : 'Sign Up Error',

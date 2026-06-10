@@ -51,7 +51,7 @@ export class DBService<T> {
   async updateByID(id: Types.ObjectId, data: any) {
     try {
       return await this.model.findByIdAndUpdate(id, data, {
-        new: true,
+        returnDocument: 'after',
         runValidators: true,
       });
     } catch (error) {

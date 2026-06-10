@@ -6,7 +6,7 @@ export const encrypt = (
   plainData: string,
 ): { iv: string; encryptedData: string } => {
   const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(alg, env.encryption_sk, iv);
+  const cipher = crypto.createCipheriv(alg, Buffer.from(env.encryption_sk, 'hex'), iv);
   let encryptedData = cipher.update(plainData, 'utf-8', 'hex');
   encryptedData += cipher.final('hex');
   return {
@@ -22,7 +22,7 @@ export const decrypt = (
   data.forEach((d) => {
     const iv = Buffer.from(d.iv, 'hex');
     const encryptedText = d.encryptedData;
-    const decipher = crypto.createDecipheriv(alg, env.encryption_sk, iv);
+    const decipher = crypto.createDecipheriv(alg, Buffer.from(env.encryption_sk, 'hex'), iv);
     let decryptedData = decipher.update(encryptedText, 'hex', 'utf-8');
     decryptedData += decipher.final('utf-8');
     decryptedArray.push(decryptedData);

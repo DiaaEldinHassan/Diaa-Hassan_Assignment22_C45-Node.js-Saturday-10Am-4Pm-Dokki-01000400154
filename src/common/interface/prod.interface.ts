@@ -7,4 +7,9 @@ export interface IProd {
   seller: Types.ObjectId;
   stock: number;
   category: string;
+  brand: string;
+  images?: string[];
+  approved?: boolean;
+  deletedAt?: Date | null;
+  retrievedAt?: Date | null;
 }

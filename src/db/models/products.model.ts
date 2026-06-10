@@ -18,6 +18,9 @@ export class Product {
   @Prop({ required: true, enum: ECategory, trim: true })
   category: string;
 
+  @Prop({ required: true, trim: true })
+  brand: string;
+
   @Prop({ required: true })
   stock: number;
 
@@ -29,6 +32,28 @@ export class Product {
 
   @Prop({ default: false })
   approved?: boolean;
+
+  @Prop({ type: Date })
+  deletedAt?: Date;
+
+  @Prop({ type: Date })
+  retrievedAt?: Date;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+
+const excludeDeleted = function (this: any) {
+  const query = this.getQuery();
+
+  if (!query?.includeDeleted) {
+    this.where({
+      $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }],
+    });
+  } else {
+    delete query.includeDeleted;
+  }
+};
+
+ProductSchema.pre(/^find/, excludeDeleted);
+ProductSchema.pre('findOne', excludeDeleted);
+ProductSchema.pre('findOneAndUpdate', excludeDeleted);
