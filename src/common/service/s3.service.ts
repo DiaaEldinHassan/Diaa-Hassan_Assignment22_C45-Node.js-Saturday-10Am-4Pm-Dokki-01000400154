@@ -1,5 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  GetObjectCommand,
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { env } from '../../config';
 
 @Injectable()
@@ -34,11 +40,34 @@ export class S3Service {
   }
 
   async deleteFile(key: string): Promise<void> {
-    const { DeleteObjectCommand } = await import('@aws-sdk/client-s3');
     const command = new DeleteObjectCommand({
       Bucket: env.s3_bucket_name,
       Key: key,
     });
     await this.s3.send(command);
+  }
+
+  async getPresignedUrl(key: string): Promise<string> {
+    const command = new GetObjectCommand({
+      Bucket: env.s3_bucket_name,
+      Key: key,
+    });
+    return getSignedUrl(this.s3, command, {
+      expiresIn: env.s3_expiration_time,
+    });
+  }
+
+  async addProfilePic(userId: string, file: Express.Multer.File): Promise<string> {
+    const ext = file.originalname.split('.').pop();
+    const key = `Users/Profile/${userId}/${userId}.${ext}`;
+    await this.uploadFile(file.buffer, key, file.mimetype);
+    return key;
+  }
+
+  async addProductImage(sellerId: string, file: Express.Multer.File): Promise<string> {
+    const timestamp = Date.now();
+    const key = `Products/${sellerId}/${timestamp}_${file.originalname}`;
+    await this.uploadFile(file.buffer, key, file.mimetype);
+    return key;
   }
 }

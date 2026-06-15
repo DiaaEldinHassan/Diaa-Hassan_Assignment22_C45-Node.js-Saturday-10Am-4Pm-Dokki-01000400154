@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
+import { SellerModule } from './modules/seller/seller.module';
+import { AdminModule } from './modules/admin/admin.module';
 import { DatabaseModule } from './db/db.module';
 import { ConfigModule } from '@nestjs/config';
 import { env } from './config';
@@ -20,6 +22,8 @@ import { env } from './config';
     AuthModule,
     UsersModule,
     ProductsModule,
+    SellerModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

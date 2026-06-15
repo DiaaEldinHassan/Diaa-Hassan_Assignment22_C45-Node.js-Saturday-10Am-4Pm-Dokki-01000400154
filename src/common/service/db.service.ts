@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { HydratedDocument, Model, Types } from 'mongoose';
-import { BadRequestError, NotFoundError, IUser, IProd } from '../index';
+import { BadRequestError, NotFoundError, IUser, IProd, IReview } from '../index';
 
 export class DBService<T> {
   constructor(protected model: Model<T>) {}
@@ -78,6 +78,13 @@ export class UserDBService extends DBService<IUser> {
 @Injectable()
 export class ProductDBService extends DBService<IProd> {
   constructor(@InjectModel('Products') model: Model<IProd>) {
+    super(model);
+  }
+}
+
+@Injectable()
+export class ReviewDBService extends DBService<IReview> {
+  constructor(@InjectModel('Reviews') model: Model<IReview>) {
     super(model);
   }
 }

@@ -1,35 +1,30 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AdminController } from './admin.controller';
+import { UserDBService, ProductDBService, ReviewDBService } from '../../common/service/db.service';
+import { AuthGuard } from '../../guards/auth.guard';
+import { TokenService } from '../../common/service/token.service';
+import { RedisModule } from '../redis/redis.module';
 import { User, UserSchema } from '../../db/models/user.model';
 import { Product, ProductSchema } from '../../db/models/products.model';
-import { Cart, CartSchema } from '../../db/models/cart.model';
 import { Review, ReviewSchema } from '../../db/models/reviews.model';
-import { TokenService, UserDBService, ProductDBService, ReviewDBService } from '../../common';
-import { S3Service } from '../../common/service/s3.service';
-import { AuthGuard } from '../../guards/auth.guard';
-import { RedisModule } from '../redis/redis.module';
-import { UsersController } from './users.controller';
-import { UserService } from './users.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'Users', schema: UserSchema },
       { name: 'Products', schema: ProductSchema },
-      { name: 'Carts', schema: CartSchema },
       { name: 'Reviews', schema: ReviewSchema },
     ]),
     RedisModule,
   ],
-  controllers: [UsersController],
+  controllers: [AdminController],
   providers: [
-    UserService,
     UserDBService,
     ProductDBService,
     ReviewDBService,
-    TokenService,
     AuthGuard,
-    S3Service,
+    TokenService,
   ],
 })
-export class UsersModule {}
+export class AdminModule {}
